@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Personal Manager</string>
+    <string name="widget_name">Personal Manager Widget</string>
+    <string name="permission_usage_access">Usage Access</string>
+    <string name="permission_accessibility">Accessibility Service</string>
+    <string name="permission_overlay">Overlay</string>
+    <string name="permission_notifications">Notifications</string>
+    <string name="permission_exact_alarm">Exact Alarm</string>
+    <string name="permission_calendar">Calendar</string>
+    <string name="permission_battery">Battery Optimization</string>
+    <string name="granted">Granted</string>
+    <string name="denied">Denied</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="blocked_title">Focus Time</string>
+    <string name="blocked_message">This app is blocked during this routine block.</string>
+    <string name="go_home">Return to Home</string>
+</resources>
