@@ -13,6 +13,7 @@ sealed class Screen(val route: String) {
     object AppLimits : Screen("app_limits")
     object Pomodoro : Screen("pomodoro")
     object Permissions : Screen("permissions")
+    object Notes : Screen("notes")
 }
 
 @Composable
@@ -25,5 +26,6 @@ fun PersonalManagerNavHost() {
         composable(Screen.AppLimits.route) { AppLimitsScreen(onNavigate = {}) }
         composable(Screen.Pomodoro.route) { PomodoroScreen(onNavigate = {}) }
         composable(Screen.Permissions.route) { PermissionsScreen(onNavigate = {}) }
+        composable(Screen.Notes.route) { NotesScreen(onNavigate = {}) }
     }
 }

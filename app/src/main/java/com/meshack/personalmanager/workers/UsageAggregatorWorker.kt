@@ -24,7 +24,7 @@ class UsageAggregatorWorker @Inject constructor(
     override suspend fun doWork(): Result {
         try {
             val today = LocalDate.now()
-            val limits = appLimitRepository.getBlacklistedSync().first()
+            val limits = appLimitRepository.getBlacklisted().first()
             val mgr = applicationContext.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
             val start = today.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
             val end = System.currentTimeMillis()

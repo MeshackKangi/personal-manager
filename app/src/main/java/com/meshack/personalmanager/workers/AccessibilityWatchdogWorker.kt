@@ -30,9 +30,7 @@ class AccessibilityWatchdogWorker @Inject constructor(
         repeat(6) {
             if (!isActive) return@repeat
             try {
-                // Trigger a health-check; real blocking is done inline by the manager
-                val limits = appLimitRepository.getBlacklistedSync()
-                limits.firstOrNull { true } // just touch repo
+                val limits = appLimitRepository.getBlacklisted().firstOrNull { true }
             } catch (_: Throwable) { /* keep watchdog alive */ }
             delay(30_000L)
         }

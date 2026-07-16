@@ -25,11 +25,13 @@ class BlockOverlayService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(1, Notification.Builder(this, CHANNEL_ID)
+        val notif = androidx.core.app.NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setOngoing(true)
-            .build())
-        // Periodically re-evaluate foreground app via appBlockManager
+            .setContentTitle(getString(R.string.app_name))
+            .setPriority(androidx.core.app.NotificationCompat.PRIORITY_LOW)
+            .build()
+        startForeground(1, notif)
         appBlockManager.startMonitoring()
         return START_STICKY
     }

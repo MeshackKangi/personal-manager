@@ -45,7 +45,7 @@ class AppBlockManager @Inject constructor(
     suspend fun evaluateForegroundApp() = withContext(Dispatchers.Default) {
         val foreground = getForegroundAppPackage() ?: return@withContext
         val activeBlock = routineBlockRepository.getCurrentActiveBlock(java.time.LocalDate.now())
-        val limits = appLimitRepository.getBlacklistedSync()
+        val limits = appLimitRepository.getBlacklisted()
         val blacklist = limits.map { it.packageName }
 
         if (foreground in blacklist) {
@@ -70,7 +70,7 @@ class AppBlockManager @Inject constructor(
             val mgr = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
             val now = System.currentTimeMillis()
             val stats = mgr.queryUsageStats(
-                UsageStatsManager.INTERVAL_BEST, now - 60_000, now
+                UsageStatsManager.INTERVAL_DAILY, now - 5 * 60_000, now
             )
             stats.maxByOrNull { it.lastTimeUsed }?.packageName
         } catch (t: Throwable) {

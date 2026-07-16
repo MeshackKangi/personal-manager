@@ -28,9 +28,7 @@ class RoutineBlockRepository @Inject constructor(
     suspend fun insertWithValidation(block: RoutineBlock): Result<Long> = runCatching {
         val blocks = dao.getAllBlocksForDayTypeSync(block.dayType)
         val endExclusive = if (block.endMinute > 0 && block.endMinute <= 1440) block.endMinute else 1440
-        val overlapping = blocks.count { it.id != block.id ->
-            it.startMinute < endExclusive && it.endMinute > block.startMinute
-        }
+        val overlapping = blocks.count { b -> b.id != block.id && b.startMinute < endExclusive && b.endMinute > block.startMinute }
         if (overlapping > 0) {
             throw IllegalArgumentException("Block overlaps with an existing block for ${block.dayType.name}")
         }

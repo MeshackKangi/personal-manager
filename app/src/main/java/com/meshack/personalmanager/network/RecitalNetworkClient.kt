@@ -22,7 +22,7 @@ class RecitalNetworkClient @Inject constructor() {
                 val obj = JSONObject(body)
                 val ref = obj.optString("reference", "")
                 val text = obj.optString("text", "").trim()
-                emptyList<Recital?>()
+                if (text.isNotBlank()) listOf(Recital(text = text, source = com.meshack.personalmanager.domain.RecitalSource.VERSE_API)) else emptyList()
             }
         }.getOrDefault(emptyList())
     }

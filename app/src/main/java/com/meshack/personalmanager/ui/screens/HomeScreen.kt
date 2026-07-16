@@ -55,22 +55,32 @@ fun HomeScreen(
             }
         }
         item {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = { onNavigate(Screen.Routine) }, modifier = Modifier.weight(1f)) {
-                    Text("Routine")
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(onClick = { onNavigate(Screen.Routine) }, modifier = Modifier.weight(1f)) {
+                        Text("Routine")
+                    }
+                    Button(onClick = { onNavigate(Screen.Tasks) }, modifier = Modifier.weight(1f)) {
+                        Text("Tasks")
+                    }
                 }
-                Button(onClick = { onNavigate(Screen.Tasks) }, modifier = Modifier.weight(1f)) {
-                    Text("Tasks")
-                }
-                Button(onClick = { onNavigate(Screen.AppLimits) }, modifier = Modifier.weight(1f)) {
-                    Text("Blocking")
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(onClick = { onNavigate(Screen.AppLimits) }, modifier = Modifier.weight(1f)) {
+                        Text("Blocking")
+                    }
+                    Button(onClick = { onNavigate(Screen.Notes) }, modifier = Modifier.weight(1f)) {
+                        Text("Notes")
+                    }
+                    Button(onClick = { onNavigate(Screen.Permissions) }, modifier = Modifier.weight(1f)) {
+                        Text("Perms")
+                    }
                 }
             }
         }
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(modicalign = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text("Focus Mode", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                         Button(onClick = { pomodoroViewModel.toggle() }) {
                             Text(if (pomodoroViewModel.isRunning) "Pause" else "Start")

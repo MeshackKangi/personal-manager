@@ -27,21 +27,43 @@ fun RoutineScreen(onNavigate: (Screen) -> Unit, viewModel: RoutineViewModel = hi
     Scaffold(topBar = { TopAppBar(title = { Text("Routine") }) }) { padding ->
         LazyColumn(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             item {
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(onClick = { viewModel.onDayTypeChanged(DayType.WEEKDAY) }, selected = true, label = { Text("Weekday") })
-                    FilterChip(onClick = { }, selected = false, label = { Text("Weekend") })
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    FilterChip(
+                        onClick = { viewModel.onDayTypeChanged(DayType.WEEKDAY) },
+                        selected = viewModel.dayType == DayType.WEEKDAY,
+                        label = { Text("Weekday") }
+                    )
+
+                    FilterChip(
+                        onClick = { viewModel.onDayTypeChanged(DayType.WEEKEND) },
+                        selected = viewModel.dayType == DayType.WEEKEND,
+                        label = { Text("Weekend") }
+                    )
                 }
             }
+
             item {
-                OutlinedButton(onClick = { viewModel.openAddDialog() }, modifier = Modifier.fillMaxWidth()) {
-                    Icon(Icons.Default.Add, contentDescription = null)
-                    Spacer(Modifier.size(8.dp))
-                    Text("Add Block")
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(onClick = { viewModel.openAddDialog() }) {
+                        Icon(Icons.Default.Add, contentDescription = null)
+                        Spacer(Modifier.size(8.dp))
+                        Text("Add Block")
+                    }
                 }
             }
+
             error?.let {
                 item { Text(it, color = MaterialTheme.colorScheme.error) }
             }
+
             items(blocks) { block ->
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -60,7 +82,7 @@ fun RoutineScreen(onNavigate: (Screen) -> Unit, viewModel: RoutineViewModel = hi
     if (viewModel.showAddDialog) {
         AddRoutineBlockDialog(
             onSave = { name, startMinute, endMinute, free ->
-                viewModel.insert(RoutineBlock(name = name, dayType = DayType.WEEKDAY, startMinute = startMinute, endMinute = endMinute, isFreeTime = free))
+                viewModel.insert(RoutineBlock(name = name, dayType = viewModel.dayType, startMinute = startMinute, endMinute = endMinute, isFreeTime = free))
             },
             onDismiss = { viewModel.dismissAddDialog() }
         )
