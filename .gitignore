@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+*/build/
+*/build/*
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Local config
+local.properties
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temp
+*.tmp
+*.swp
+*~
