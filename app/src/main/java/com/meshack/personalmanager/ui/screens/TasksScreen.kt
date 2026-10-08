@@ -11,8 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.meshack.personalmanager.ui.Screen
 import com.meshack.personalmanager.ui.TasksViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TasksScreen(onNavigate: (Screen) -> Unit, viewModel: TasksViewModel = hiltViewModel()) {
     var newTitle by remember { mutableStateOf("") }
@@ -53,7 +55,7 @@ fun TasksScreen(onNavigate: (Screen) -> Unit, viewModel: TasksViewModel = hiltVi
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(task.title, style = MaterialTheme.typography.titleSmall)
                             }
-                            Checkbox(checked = task.done, onCheckedChange = { viewModel.toggleDone(task, it) })
+                            Checkbox(checked = task.done, onCheckedChange = { viewModel.toggleDone(task) })
                         }
                     }
                 }

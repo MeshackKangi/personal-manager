@@ -7,11 +7,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.meshack.personalmanager.ui.AppLimitsViewModel
+import com.meshack.personalmanager.ui.Screen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppLimitsScreen(onNavigate: (Screen) -> Unit, viewModel: AppLimitsViewModel = hiltViewModel()) {
     val limits by viewModel.limits.collectAsState(initial = emptyList())

@@ -10,6 +10,7 @@ import android.os.Process
 import android.provider.Settings
 import com.meshack.personalmanager.util.PermissionStatus
 import com.meshack.personalmanager.util.PermissionState
+import com.meshack.personalmanager.services.MeshackAccessibilityService
 import com.meshack.personalmanager.util.PermissionStatus.*
 
 object PermissionChecker {

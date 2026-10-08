@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("dagger.hilt.android.plugin")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -66,6 +66,8 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
+    kapt(libs.androidx.hilt.compiler)
 
     // Lifecycle / ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -74,12 +76,18 @@ dependencies {
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
 
+    // Networking
+    implementation(libs.okhttp)
+
     // Desugaring for java.time APIs
     coreLibraryDesugaring(libs.desugaring)
 
+    // Ensure kotlin-reflect matches Kotlin plugin version to avoid kapt metadata issues
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
-    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.room.testing)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.runner)
@@ -90,4 +98,7 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }

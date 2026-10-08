@@ -1,8 +1,9 @@
 package com.meshack.personalmanager.util
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
-class SingleLiveEvent<T> : LiveData<T>() {
+class SingleLiveEvent<T> : MutableLiveData<T>() {
     private var pending: T? = null
     @Volatile private var handled = false
 
@@ -11,7 +12,7 @@ class SingleLiveEvent<T> : LiveData<T>() {
         if (!handled) { pending?.let { observer.onChanged(it) }.also { handled = true; pending = null } }
     }
 
-    fun postValue(value: T) {
+    override fun postValue(value: T) {
         pending = value; handled = false
         super.postValue(value)
     }

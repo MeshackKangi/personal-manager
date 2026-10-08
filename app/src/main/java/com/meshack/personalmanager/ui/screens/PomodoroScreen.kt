@@ -3,9 +3,14 @@ package com.meshack.personalmanager.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.meshack.personalmanager.ui.PomodoroViewModel
+import com.meshack.personalmanager.ui.Screen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PomodoroScreen(onNavigate: (Screen) -> Unit, viewModel: PomodoroViewModel = hiltViewModel()) {
     Scaffold(topBar = { TopAppBar(title = { Text("Focus Mode") }) }) { padding ->

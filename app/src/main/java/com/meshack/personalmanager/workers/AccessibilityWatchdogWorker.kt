@@ -11,12 +11,11 @@ import com.meshack.personalmanager.util.ServiceAliveHolder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.isActive
-import javax.inject.Inject
+import androidx.hilt.work.HiltWorker
 
-@AssistedInject
-class AccessibilityWatchdogWorker @Inject constructor(
+
+@HiltWorker
+class AccessibilityWatchdogWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
     private val appLimitRepository: AppLimitRepository,
@@ -28,9 +27,8 @@ class AccessibilityWatchdogWorker @Inject constructor(
     override suspend fun doWork(): Result {
         if (!ServiceAliveHolder.isAlive) return Result.success()
         repeat(6) {
-            if (!isActive) return@repeat
             try {
-                val limits = appLimitRepository.getBlacklisted().firstOrNull { true }
+                val limits = appLimitRepository.getBlacklisted()
             } catch (_: Throwable) { /* keep watchdog alive */ }
             delay(30_000L)
         }

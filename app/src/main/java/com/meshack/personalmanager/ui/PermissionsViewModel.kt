@@ -1,7 +1,9 @@
 package com.meshack.personalmanager.ui
 
 import android.app.Application
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.meshack.personalmanager.domain.PermissionChecker
 import com.meshack.personalmanager.data.repositories.AppLimitRepository
@@ -15,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PermissionsViewModel @Inject constructor(
-    application: Application,
+    private val application: Application,
     private val routineBlockRepository: RoutineBlockRepository,
     private val appLimitRepository: AppLimitRepository
 ) : ViewModel() {

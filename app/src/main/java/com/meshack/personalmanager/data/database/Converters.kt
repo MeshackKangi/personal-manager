@@ -1,6 +1,7 @@
 package com.meshack.personalmanager.data.database
 
 import androidx.room.TypeConverter
+import java.time.LocalDateTime
 import com.meshack.personalmanager.domain.DayType
 import com.meshack.personalmanager.domain.RecitalSource
 import java.time.LocalDate
@@ -26,4 +27,11 @@ class Converters {
 
     @TypeConverter fun toEpochDay(date: LocalDate): Long =
         date.toEpochDay()
-}
+    @TypeConverter
+fun fromLocalDateTime(value: String?): LocalDateTime? =
+    value?.let(LocalDateTime::parse)
+
+@TypeConverter
+fun toLocalDateTime(value: LocalDateTime?): String? =
+    value?.toString()
+    }

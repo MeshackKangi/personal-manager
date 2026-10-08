@@ -14,17 +14,19 @@ import com.meshack.personalmanager.R
 import com.meshack.personalmanager.services.BlockOverlayActivity
 import com.meshack.personalmanager.data.repositories.RecitalRepository
 import com.meshack.personalmanager.data.local.entities.Recital
+import com.meshack.personalmanager.network.RecitalNetworkClient
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.first
 import kotlin.random.Random
-import javax.inject.Inject
+import androidx.hilt.work.HiltWorker
 
-@AssistedInject
-class RecitalNotifyWorker @Inject constructor(
+@HiltWorker
+class RecitalNotifyWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
     private val recitalRepository: RecitalRepository,
-    private val app: com.meshack.personalmanager.MeshackApp
+    private val networkClient: RecitalNetworkClient
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
@@ -34,7 +36,7 @@ class RecitalNotifyWorker @Inject constructor(
     }
 
     private suspend fun pickRecital(): Recital? {
-        return runCatching { app.recitalNetworkClient.fetchVerseOfDay() }
+        return runCatching { networkClient.fetchVerseOfDay() }
             .getOrNull()
             ?.randomOrNull()
             ?: pickLocal()

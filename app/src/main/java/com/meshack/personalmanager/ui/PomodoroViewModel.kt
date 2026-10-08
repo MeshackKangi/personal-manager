@@ -102,12 +102,12 @@ class PomodoroViewModel @Inject constructor(
 
     fun stop() {
         isRunning = false
-        saveSession()
+        viewModelScope.launch { saveSession() }
     }
 
     private fun ensureSession() {
         todaySession = PomodoroSession(date = LocalDate.now(), startedAt = java.time.LocalDateTime.now())
-        saveSession()
+        viewModelScope.launch { saveSession() }
     }
 
     private suspend fun saveSession() {

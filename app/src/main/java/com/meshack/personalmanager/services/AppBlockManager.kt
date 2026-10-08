@@ -14,12 +14,13 @@ import com.meshack.personalmanager.data.repositories.RoutineBlockRepository
 import com.meshack.personalmanager.data.repositories.UsageLogRepository
 import kotlinx.coroutines.*
 import java.util.*
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AppBlockManager @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val appLimitRepository: AppLimitRepository,
     private val routineBlockRepository: RoutineBlockRepository,
     private val usageLogRepository: UsageLogRepository,

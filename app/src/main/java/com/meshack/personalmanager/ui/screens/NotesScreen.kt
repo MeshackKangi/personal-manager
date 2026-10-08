@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.meshack.personalmanager.ui.NotesViewModel
+import com.meshack.personalmanager.ui.Screen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen(onNavigate: (Screen) -> Unit, viewModel: NotesViewModel = hiltViewModel()) {
     val notes by viewModel.notes.collectAsState(initial = emptyList())

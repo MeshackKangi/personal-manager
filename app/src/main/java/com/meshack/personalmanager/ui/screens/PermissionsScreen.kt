@@ -7,12 +7,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.meshack.personalmanager.ui.PermissionsViewModel
+import com.meshack.personalmanager.ui.Screen
 import com.meshack.personalmanager.util.PermissionStatus
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PermissionsScreen(onNavigate: (Screen) -> Unit, viewModel: PermissionsViewModel = hiltViewModel()) {
     val state = viewModel.state

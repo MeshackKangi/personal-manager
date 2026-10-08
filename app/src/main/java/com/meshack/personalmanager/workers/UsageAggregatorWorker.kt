@@ -8,13 +8,12 @@ import com.meshack.personalmanager.data.repositories.AppLimitRepository
 import com.meshack.personalmanager.data.repositories.UsageLogRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.first
 import java.time.LocalDate
 import java.time.ZoneId
-import javax.inject.Inject
+import androidx.hilt.work.HiltWorker
 
-@AssistedInject
-class UsageAggregatorWorker @Inject constructor(
+@HiltWorker
+class UsageAggregatorWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
     private val appLimitRepository: AppLimitRepository,
@@ -24,7 +23,7 @@ class UsageAggregatorWorker @Inject constructor(
     override suspend fun doWork(): Result {
         try {
             val today = LocalDate.now()
-            val limits = appLimitRepository.getBlacklisted().first()
+            val limits = appLimitRepository.getBlacklisted()
             val mgr = applicationContext.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
             val start = today.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
             val end = System.currentTimeMillis()
@@ -32,7 +31,7 @@ class UsageAggregatorWorker @Inject constructor(
 
             for (limit in limits) {
                 val total = stats[limit.packageName] ?: continue
-                val minutes = (total / 1000.0 / 60.0).toInt()
+                val minutes = (total.totalTimeInForeground / 1000.0 / 60.0).toInt()
                 usageLogRepository.addMinutes(limit.packageName, today, minutes)
             }
         } catch (_: Throwable) { /* nonfatal */ }

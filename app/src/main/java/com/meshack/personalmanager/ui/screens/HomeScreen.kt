@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.meshack.personalmanager.ui.HomeViewModel
 import com.meshack.personalmanager.ui.PomodoroViewModel
 import com.meshack.personalmanager.ui.RoutineViewModel
+import com.meshack.personalmanager.ui.Screen
 import com.meshack.personalmanager.ui.TasksViewModel
 
 @Composable
@@ -27,7 +28,7 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val activeBlock by routineViewModel.currentActiveBlock.collectAsState(initial = null)
-    val dashboard by homeViewModel.dashboard.collectAsState(initial = HomeViewModel.Dashboard())
+    val dashboard = homeViewModel.dashboard
     val tasks by tasksViewModel.tasks.collectAsState(initial = emptyList())
     val remaining = pomodoroViewModel.remainingSeconds
 
