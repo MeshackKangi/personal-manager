@@ -166,7 +166,8 @@ fun HomeScreen(
                 activeGoal = activeGoal,
                 recent = summaries.take(3),
                 todayTasks = todayTasks,
-                onToggleTask = { homeViewModel.toggleTask(it) }
+                onToggleTask = { homeViewModel.toggleTask(it) },
+                onOpenGoals = { onNavigate(Screen.Goals) }
             )
         }
         item {
@@ -216,9 +217,10 @@ private fun ActiveGoalPad(
     activeGoal: GoalSummary?,
     recent: List<GoalSummary>,
     todayTasks: List<Task>,
-    onToggleTask: (Task) -> Unit
+    onToggleTask: (Task) -> Unit,
+    onOpenGoals: () -> Unit
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(modifier = Modifier.fillMaxWidth(), onClick = onOpenGoals) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             if (activeGoal == null && recent.isEmpty()) {
                 Text("Active Goal", style = MaterialTheme.typography.titleMedium)

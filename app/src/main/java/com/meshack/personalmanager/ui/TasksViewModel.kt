@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.meshack.personalmanager.data.repositories.GoalRepository
 import com.meshack.personalmanager.data.repositories.TaskRepository
 import com.meshack.personalmanager.data.local.entities.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TasksViewModel @Inject constructor(
-    private val taskRepository: TaskRepository
+    private val taskRepository: TaskRepository,
+    goalRepository: GoalRepository
 ) : ViewModel() {
 
     var selectedDate by mutableStateOf(LocalDate.now())
@@ -35,6 +37,9 @@ class TasksViewModel @Inject constructor(
 
     var tasks: StateFlow<List<Task>> = taskRepository.getTasksFor(selectedDate)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val goalTitles: StateFlow<Map<Long, String>> = goalRepository.milestoneGoalTitles()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyMap())
 
     init { recalc() }
 

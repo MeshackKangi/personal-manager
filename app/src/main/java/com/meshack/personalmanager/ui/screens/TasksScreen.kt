@@ -31,6 +31,7 @@ fun TasksScreen(
     }
 
     val tasks by viewModel.tasks.collectAsState(initial = emptyList())
+    val goalTitles by viewModel.goalTitles.collectAsState()
 
     Scaffold(
         modifier = Modifier.padding(contentPadding),
@@ -61,6 +62,15 @@ fun TasksScreen(
                         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(task.title, style = MaterialTheme.typography.titleSmall)
+                                task.milestoneId?.let { mid ->
+                                    goalTitles[mid]?.let { goalTitle ->
+                                        AssistChip(
+                                            onClick = {},
+                                            label = { Text(goalTitle, maxLines = 1) },
+                                            modifier = Modifier.padding(top = 4.dp)
+                                        )
+                                    }
+                                }
                             }
                             Checkbox(checked = task.done, onCheckedChange = { viewModel.toggleDone(task) })
                         }

@@ -25,6 +25,9 @@ interface MilestoneDao {
     @Update
     suspend fun update(milestone: Milestone)
 
+    @Query("DELETE FROM milestones WHERE id = :id")
+    suspend fun deleteById(id: Long)
+
     @Query("UPDATE milestones SET updated_at = :updatedAt WHERE id = :id")
     suspend fun touchUpdated(id: Long, updatedAt: java.time.LocalDateTime)
 }

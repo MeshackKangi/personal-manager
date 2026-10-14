@@ -13,6 +13,9 @@ interface GoalDao {
     @Query("SELECT * FROM goals WHERE archived = 0 ORDER BY updated_at DESC")
     fun getOpenGoals(): Flow<List<Goal>>
 
+    @Query("SELECT * FROM goals WHERE archived = 1 ORDER BY updated_at DESC")
+    fun getArchivedGoals(): Flow<List<Goal>>
+
     @Query("SELECT * FROM goals ORDER BY updated_at DESC")
     fun getAllGoals(): Flow<List<Goal>>
 
@@ -24,6 +27,12 @@ interface GoalDao {
 
     @Update
     suspend fun update(goal: Goal)
+
+    @Query("UPDATE goals SET archived = 1, updated_at = :updatedAt WHERE id = :id")
+    suspend fun archive(id: Long, updatedAt: java.time.LocalDateTime)
+
+    @Query("UPDATE goals SET archived = 0, updated_at = :updatedAt WHERE id = :id")
+    suspend fun unarchive(id: Long, updatedAt: java.time.LocalDateTime)
 
     @Query("UPDATE goals SET updated_at = :updatedAt WHERE id = :id")
     suspend fun touchUpdated(id: Long, updatedAt: java.time.LocalDateTime)

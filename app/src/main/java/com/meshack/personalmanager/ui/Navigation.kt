@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notes
@@ -40,7 +41,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.meshack.personalmanager.ui.screens.AppLimitsScreen
+import com.meshack.personalmanager.ui.screens.GoalDetailScreen
+import com.meshack.personalmanager.ui.screens.GoalsScreen
 import com.meshack.personalmanager.ui.screens.HomeScreen
 import com.meshack.personalmanager.ui.screens.NotesScreen
 import com.meshack.personalmanager.ui.screens.PermissionsScreen
@@ -54,6 +59,7 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Home : Screen("home", "Dashboard", Icons.Filled.Home)
     object Routine : Screen("routine", "Routine", Icons.Filled.Schedule)
     object Tasks : Screen("tasks", "Tasks", Icons.Filled.Done)
+    object Goals : Screen("goals", "Goals", Icons.Filled.EmojiEvents)
     object AppLimits : Screen("app_limits", "Blocking", Icons.Filled.Block)
     object Pomodoro : Screen("pomodoro", "Focus", Icons.Filled.Timer)
     object Notes : Screen("notes", "Notes", Icons.Filled.Notes)
@@ -61,8 +67,11 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Settings : Screen("settings", "Settings", Icons.Filled.Settings)
 
     companion object {
+        const val GOAL_DETAIL_BASE = "goal_detail"
+        fun goalDetailRoute(goalId: Long) = "$GOAL_DETAIL_BASE/$goalId"
+
         val drawerItems: List<Screen> =
-            listOf(Home, Routine, Tasks, AppLimits, Pomodoro, Notes, Permissions, Settings)
+            listOf(Home, Routine, Tasks, Goals, AppLimits, Pomodoro, Notes, Permissions, Settings)
     }
 }
 
@@ -75,6 +84,8 @@ fun PersonalManagerNavHost() {
     val backStackEntry by nav.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val currentScreen = Screen.drawerItems.firstOrNull { it.route == currentRoute } ?: Screen.Home
+    val topBarTitle = if (currentRoute?.startsWith(Screen.GOAL_DETAIL_BASE) == true) "Goal details"
+    else currentScreen.title
 
     fun navigate(screen: Screen) {
         scope.launch { drawerState.close() }
@@ -119,7 +130,7 @@ fun PersonalManagerNavHost() {
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
-                    title = { Text(currentScreen.title) },
+                    title = { Text(topBarTitle) },
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
                             Icon(Icons.Filled.Menu, contentDescription = "Menu")
@@ -145,6 +156,25 @@ fun PersonalManagerNavHost() {
                 }
                 composable(Screen.Tasks.route) {
                     TasksScreen(onNavigate = { navigate(it) }, contentPadding = padding)
+                }
+                composable(Screen.Goals.route) {
+                    GoalsScreen(
+                        onOpenGoal = { goalId ->
+                            scope.launch { drawerState.close() }
+                            nav.navigate(Screen.goalDetailRoute(goalId))
+                        },
+                        contentPadding = padding
+                    )
+                }
+                composable(
+                    route = "${Screen.GOAL_DETAIL_BASE}/{goalId}",
+                    arguments = listOf(navArgument("goalId") { type = NavType.LongType })
+                ) { entry ->
+                    GoalDetailScreen(
+                        goalId = entry.arguments?.getLong("goalId") ?: 0L,
+                        onNavigateUp = { nav.popBackStack() },
+                        contentPadding = padding
+                    )
                 }
                 composable(Screen.AppLimits.route) {
                     AppLimitsScreen(onNavigate = { navigate(it) }, contentPadding = padding)

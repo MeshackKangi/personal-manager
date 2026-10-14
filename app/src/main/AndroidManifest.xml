@@ -74,6 +74,12 @@
             android:foregroundServiceType="specialUse"
             android:exported="false" />
 
+        <!-- Foreground Service for the focus timer (banner + reliable ticks) -->
+        <service
+            android:name=".services.FocusService"
+            android:foregroundServiceType="specialUse"
+            android:exported="false" />
+
         <!-- Boot receiver -->
         <receiver
             android:name=".receivers.BootCompletedReceiver"

@@ -14,7 +14,10 @@ class TaskRepository @Inject constructor(
 ) {
     fun getTasksFor(date: LocalDate): Flow<List<Task>> = dao.getTasksForDate(date)
     fun getTasksForBlock(date: LocalDate, blockId: Long?): Flow<List<Task>> = dao.getTasksForBlock(date, blockId)
+    fun tasksForMilestone(milestoneId: Long): Flow<List<Task>> = dao.getByMilestone(milestoneId)
+    suspend fun subtasksOf(parentId: Long): List<Task> = dao.getSubtasks(parentId)
     suspend fun insert(task: Task) = dao.insert(task)
+    suspend fun renameTask(id: Long, title: String) = dao.rename(id, title)
     suspend fun markDone(id: Long, done: Boolean) = dao.markDone(id, done)
     suspend fun toggleDone(task: Task) {
         dao.markDone(task.id, !task.done)

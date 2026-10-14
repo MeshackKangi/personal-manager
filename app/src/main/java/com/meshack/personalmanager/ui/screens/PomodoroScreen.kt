@@ -23,7 +23,7 @@ fun PomodoroScreen(
                     Text(viewModel.phase.name, style = MaterialTheme.typography.titleLarge)
                     Text("${viewModel.remainingSeconds / 60}m ${viewModel.remainingSeconds % 60}s remaining", style = MaterialTheme.typography.headlineMedium)
                     Button(onClick = { viewModel.toggle() }) { Text(if (viewModel.isRunning) "Pause" else "Start") }
-                    TextButton(onClick = { if (viewModel.phase == com.meshack.personalmanager.ui.PomodoroViewModel.Phase.WORK) viewModel.resetWorkPhase() else viewModel.resetBreakPhase() }) { Text("Reset") }
+                    TextButton(onClick = { viewModel.reset() }) { Text("Reset") }
                 }
             }
             Card(modifier = Modifier.fillMaxWidth()) {
