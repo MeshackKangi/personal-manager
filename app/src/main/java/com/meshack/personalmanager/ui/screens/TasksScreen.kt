@@ -16,7 +16,11 @@ import com.meshack.personalmanager.ui.TasksViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TasksScreen(onNavigate: (Screen) -> Unit, viewModel: TasksViewModel = hiltViewModel()) {
+fun TasksScreen(
+    onNavigate: (Screen) -> Unit,
+    viewModel: TasksViewModel = hiltViewModel(),
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+) {
     var newTitle by remember { mutableStateOf("") }
     if (viewModel.showNewTaskDialog) {
         AlertDialog(onDismissRequest = { viewModel.dismissNewTaskDialog() }, title = { Text("New Task") }, text = {
@@ -28,11 +32,14 @@ fun TasksScreen(onNavigate: (Screen) -> Unit, viewModel: TasksViewModel = hiltVi
 
     val tasks by viewModel.tasks.collectAsState(initial = emptyList())
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Tasks") }) }, floatingActionButton = {
-        FloatingActionButton(onClick = { viewModel.openNewTaskDialog() }) {
-            Icon(Icons.Default.Add, contentDescription = null)
+    Scaffold(
+        modifier = Modifier.padding(contentPadding),
+        floatingActionButton = {
+            FloatingActionButton(onClick = { viewModel.openNewTaskDialog() }) {
+                Icon(Icons.Default.Add, contentDescription = null)
+            }
         }
-    }) { padding ->
+    ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {

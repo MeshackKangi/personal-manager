@@ -16,11 +16,14 @@ import com.meshack.personalmanager.ui.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotesScreen(onNavigate: (Screen) -> Unit, viewModel: NotesViewModel = hiltViewModel()) {
+fun NotesScreen(
+    onNavigate: (Screen) -> Unit,
+    viewModel: NotesViewModel = hiltViewModel(),
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+) {
     val notes by viewModel.notes.collectAsState(initial = emptyList())
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Notes") }) }) { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Add Note", style = MaterialTheme.typography.titleMedium)
@@ -42,5 +45,4 @@ fun NotesScreen(onNavigate: (Screen) -> Unit, viewModel: NotesViewModel = hiltVi
                 }
             }
         }
-    }
 }

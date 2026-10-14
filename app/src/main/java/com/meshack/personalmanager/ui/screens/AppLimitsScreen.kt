@@ -16,11 +16,14 @@ import com.meshack.personalmanager.ui.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppLimitsScreen(onNavigate: (Screen) -> Unit, viewModel: AppLimitsViewModel = hiltViewModel()) {
+fun AppLimitsScreen(
+    onNavigate: (Screen) -> Unit,
+    viewModel: AppLimitsViewModel = hiltViewModel(),
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+) {
     val limits by viewModel.limits.collectAsState(initial = emptyList())
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Blocking") }) }) { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Add App Limit / Blacklist", style = MaterialTheme.typography.titleMedium)
@@ -44,5 +47,4 @@ fun AppLimitsScreen(onNavigate: (Screen) -> Unit, viewModel: AppLimitsViewModel 
                 }
             }
         }
-    }
 }

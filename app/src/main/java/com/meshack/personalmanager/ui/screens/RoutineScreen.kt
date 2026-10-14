@@ -15,18 +15,23 @@ import com.meshack.personalmanager.data.local.entities.RoutineBlock
 import com.meshack.personalmanager.domain.DayType
 import com.meshack.personalmanager.ui.RoutineViewModel
 import com.meshack.personalmanager.ui.Screen
-import java.time.LocalTime
+import com.meshack.personalmanager.ui.SettingsViewModel
+import com.meshack.personalmanager.ui.components.TimePickerField
+import com.meshack.personalmanager.ui.components.formatMinute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoutineScreen(onNavigate: (Screen) -> Unit, viewModel: RoutineViewModel = hiltViewModel()) {
+fun RoutineScreen(
+    onNavigate: (Screen) -> Unit,
+    viewModel: RoutineViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+) {
     val blocks by viewModel.blocks.collectAsState(initial = emptyList())
     val error = viewModel.error
-    var startMin by remember { mutableStateOf("") }
-    var endMin by remember { mutableStateOf("") }
+    val use24h by settingsViewModel.use24h.collectAsState()
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Routine") }) }) { padding ->
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -70,7 +75,7 @@ fun RoutineScreen(onNavigate: (Screen) -> Unit, viewModel: RoutineViewModel = hi
                     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(block.name, style = MaterialTheme.typography.titleMedium)
                         Text(
-                            text = "${LocalTime.of(block.startMinute / 60, block.startMinute % 60)} - ${LocalTime.of(block.endMinute / 60, block.endMinute % 60)}",
+                            text = "${formatMinute(block.startMinute, use24h)} - ${formatMinute(block.endMinute, use24h)}",
                             style = MaterialTheme.typography.bodySmall
                         )
                         Text(if (block.isFreeTime) "Free time" else "Focus", style = MaterialTheme.typography.bodySmall)
@@ -78,10 +83,10 @@ fun RoutineScreen(onNavigate: (Screen) -> Unit, viewModel: RoutineViewModel = hi
                 }
             }
         }
-    }
 
     if (viewModel.showAddDialog) {
         AddRoutineBlockDialog(
+            use24h = use24h,
             onSave = { name, startMinute, endMinute, free ->
                 viewModel.insert(RoutineBlock(name = name, dayType = viewModel.dayType, startMinute = startMinute, endMinute = endMinute, isFreeTime = free))
             },
@@ -91,28 +96,33 @@ fun RoutineScreen(onNavigate: (Screen) -> Unit, viewModel: RoutineViewModel = hi
 }
 
 @Composable
-fun AddRoutineBlockDialog(onSave: (String, Int, Int, Boolean) -> Unit, onDismiss: () -> Unit) {
+fun AddRoutineBlockDialog(
+    use24h: Boolean,
+    onSave: (String, Int, Int, Boolean) -> Unit,
+    onDismiss: () -> Unit
+) {
     var name by remember { mutableStateOf("") }
-    var start by remember { mutableStateOf("") }
-    var end by remember { mutableStateOf("") }
+    var start by remember { mutableStateOf(8 * 60) }
+    var end by remember { mutableStateOf(9 * 60) }
     var isFree by remember { mutableStateOf(false) }
 
     AlertDialog(onDismissRequest = onDismiss, title = { Text("Add Block") }, text = {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Name") })
-            OutlinedTextField(value = start, onValueChange = { start = it }, label = { Text("Start minute 0-1439") }, isError = start.toIntOrNull() == null && start.isNotBlank())
-            OutlinedTextField(value = end, onValueChange = { end = it }, label = { Text("End minute 0-1439") }, isError = end.toIntOrNull() == null && end.isNotBlank())
+            TimePickerField(label = "Start", minuteOfDay = start, use24h = use24h, onPick = { start = it })
+            TimePickerField(label = "End", minuteOfDay = end, use24h = use24h, onPick = { end = it })
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(checked = isFree, onCheckedChange = { isFree = it })
                 Text("Free time")
             }
         }
     }, confirmButton = {
-        TextButton(onClick = {
-            val s = start.toIntOrNull() ?: return@TextButton
-            val e = end.toIntOrNull() ?: return@TextButton
-            if (s !in 0..1439 || e !in 0..1439) return@TextButton
-            onSave(name.trim(), s, e, isFree)
-        }) { Text("Save") }
+        TextButton(
+            onClick = {
+                if (name.isBlank() || start !in 0..1439 || end !in 0..1439 || end <= start) return@TextButton
+                onSave(name.trim(), start, end, isFree)
+            },
+            enabled = name.isNotBlank() && end > start
+        ) { Text("Save") }
     }, dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } })
 }

@@ -3,7 +3,10 @@ package com.meshack.personalmanager.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import com.meshack.personalmanager.ui.theme.PersonalManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,7 +16,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PersonalManagerTheme {
-                PersonalManagerNavHost()
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    PersonalManagerNavHost()
+                }
             }
         }
     }

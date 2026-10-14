@@ -55,7 +55,12 @@ dependencies {
     implementation(libs.compose.ui.graphics)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons.core)
+    implementation(libs.compose.material.icons.extended)
     implementation(libs.compose.navigation)
+
+    // Settings (DataStore Preferences)
+    implementation(libs.androidx.datastore.preferences)
 
     // Room
     implementation(libs.androidx.room.runtime)

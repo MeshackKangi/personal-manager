@@ -12,9 +12,12 @@ import com.meshack.personalmanager.ui.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PomodoroScreen(onNavigate: (Screen) -> Unit, viewModel: PomodoroViewModel = hiltViewModel()) {
-    Scaffold(topBar = { TopAppBar(title = { Text("Focus Mode") }) }) { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(24.dp), verticalArrangement = Arrangement.spacedBy(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+fun PomodoroScreen(
+    onNavigate: (Screen) -> Unit,
+    viewModel: PomodoroViewModel = hiltViewModel(),
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+) {
+    Column(modifier = Modifier.fillMaxSize().padding(contentPadding).padding(24.dp), verticalArrangement = Arrangement.spacedBy(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Text(viewModel.phase.name, style = MaterialTheme.typography.titleLarge)
@@ -30,5 +33,4 @@ fun PomodoroScreen(onNavigate: (Screen) -> Unit, viewModel: PomodoroViewModel = 
                 }
             }
         }
-    }
 }

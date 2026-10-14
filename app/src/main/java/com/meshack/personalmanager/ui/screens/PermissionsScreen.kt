@@ -17,11 +17,14 @@ import com.meshack.personalmanager.util.PermissionStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PermissionsScreen(onNavigate: (Screen) -> Unit, viewModel: PermissionsViewModel = hiltViewModel()) {
+fun PermissionsScreen(
+    onNavigate: (Screen) -> Unit,
+    viewModel: PermissionsViewModel = hiltViewModel(),
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+) {
     val state = viewModel.state
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Permission Health Check") }) }) { padding ->
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             item { Text("Status of all required permissions. Tap Open Settings to fix any red items.", style = MaterialTheme.typography.bodySmall) }
             listOf(
                 "usageAccess" to state.usageAccess,
@@ -38,7 +41,6 @@ fun PermissionsScreen(onNavigate: (Screen) -> Unit, viewModel: PermissionsViewMo
             }
             item { Button(onClick = { viewModel.refresh() }, modifier = Modifier.fillMaxWidth()) { Text("Refresh") } }
         }
-    }
 }
 
 @Composable
