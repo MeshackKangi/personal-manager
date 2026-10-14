@@ -43,6 +43,23 @@ fun formatMinute(minuteOfDay: Int, use24h: Boolean): String {
     }
 }
 
+/** Formats a live clock timestamp honoring the 12/24h setting. */
+fun formatClock(now: java.time.LocalDateTime, use24h: Boolean): String {
+    val h = now.hour
+    val m = now.minute
+    val s = now.second
+    return if (use24h) {
+        "%02d:%02d:%02d".format(h, m, s)
+    } else {
+        val suffix = if (h < 12) "AM" else "PM"
+        val h12 = when (h % 12) {
+            0 -> 12
+            else -> h % 12
+        }
+        "%d:%02d:%02d %s".format(h12, m, s, suffix)
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerField(

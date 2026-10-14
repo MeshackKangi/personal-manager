@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -79,6 +80,58 @@ fun SettingsScreen(
                     )
                 }
             }
+        }
+        FocusTargetCard(viewModel = viewModel)
+        CongratsMessageCard(viewModel = viewModel)
+    }
+}
+
+@Composable
+private fun CongratsMessageCard(viewModel: com.meshack.personalmanager.ui.SettingsViewModel) {
+    val saved by viewModel.congratsMessage.collectAsState()
+    var text by androidx.compose.runtime.remember(saved) {
+        androidx.compose.runtime.mutableStateOf(saved)
+    }
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Celebration message", style = MaterialTheme.typography.titleMedium)
+            Text(
+                "Shown with confetti when a goal hits 100%.",
+                style = MaterialTheme.typography.bodySmall
+            )
+            OutlinedTextField(
+                value = text,
+                onValueChange = { value ->
+                    text = value.take(280)
+                    viewModel.onCongratsMessageChanged(value)
+                },
+                label = { Text("Your motivational message") },
+                modifier = Modifier.fillMaxWidth(),
+                minLines = 2
+            )
+        }
+    }
+}
+
+@Composable
+private fun FocusTargetCard(viewModel: com.meshack.personalmanager.ui.SettingsViewModel) {
+    val target by viewModel.focusTargetMinutes.collectAsState()
+    var text by androidx.compose.runtime.remember(target) {
+        androidx.compose.runtime.mutableStateOf(target.toString())
+    }
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Daily focus target", style = MaterialTheme.typography.titleMedium)
+            OutlinedTextField(
+                value = text,
+                onValueChange = { value ->
+                    text = value.filter { it.isDigit() }.take(3)
+                    text.toIntOrNull()?.let { viewModel.onFocusTargetChanged(it) }
+                },
+                label = { Text("Minutes per day (default 240)") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
         }
     }
 }

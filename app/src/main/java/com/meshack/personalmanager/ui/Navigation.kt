@@ -137,7 +137,9 @@ fun PersonalManagerNavHost() {
                 startDestination = Screen.Home.route,
                 modifier = Modifier.fillMaxSize()
             ) {
-                composable(Screen.Home.route) { HomeScreen(onNavigate = { navigate(it) }) }
+                composable(Screen.Home.route) {
+                    HomeScreen(onNavigate = { navigate(it) }, contentPadding = padding)
+                }
                 composable(Screen.Routine.route) {
                     RoutineScreen(onNavigate = { navigate(it) }, contentPadding = padding)
                 }

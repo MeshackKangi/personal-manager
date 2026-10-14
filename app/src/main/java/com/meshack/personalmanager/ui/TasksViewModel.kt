@@ -69,7 +69,7 @@ class TasksViewModel @Inject constructor(
 
     fun toggleDone(task: Task) {
         viewModelScope.launch {
-            taskRepository.markDone(task.id, !task.done)
+            taskRepository.toggleDone(task)
             recalc()
         }
     }

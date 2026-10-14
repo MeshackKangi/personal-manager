@@ -14,6 +14,18 @@ interface TaskDao {
     @Query("SELECT * FROM tasks WHERE for_date = :date ORDER BY created_at")
     fun getTasksForDate(date: LocalDate): Flow<List<Task>>
 
+    @Query("SELECT * FROM tasks")
+    fun getAll(): Flow<List<Task>>
+
+    @Query("SELECT * FROM tasks WHERE id = :id LIMIT 1")
+    suspend fun getById(id: Long): Task?
+
+    @Query("SELECT * FROM tasks WHERE milestone_id = :milestoneId ORDER BY created_at")
+    fun getByMilestone(milestoneId: Long): Flow<List<Task>>
+
+    @Query("SELECT * FROM tasks WHERE parent_task_id = :parentId ORDER BY created_at")
+    suspend fun getSubtasks(parentId: Long): List<Task>
+
     @Query("SELECT * FROM tasks WHERE for_date = :date AND routine_block_id = :blockId")
     fun getTasksForBlock(date: LocalDate, blockId: Long?): Flow<List<Task>>
 

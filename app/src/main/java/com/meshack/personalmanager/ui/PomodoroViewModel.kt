@@ -41,6 +41,7 @@ class PomodoroViewModel @Inject constructor(
         private set
 
     private var todaySession: PomodoroSession? = null
+    private var workSecondsTotal: Int = 0
 
     val history: StateFlow<List<PomodoroSession>> = pomodoroRepository.sessionsSince(LocalDate.now().minusDays(30))
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
@@ -70,6 +71,7 @@ class PomodoroViewModel @Inject constructor(
             while (isActive && isRunning) {
                 delay(1000L)
                 if (remainingSeconds > 0) {
+                    if (phase == Phase.WORK) workSecondsTotal++
                     remainingSeconds--
                 } else {
                     when (phase) {
@@ -111,7 +113,14 @@ class PomodoroViewModel @Inject constructor(
     }
 
     private suspend fun saveSession() {
-        todaySession?.let { pomodoroRepository.insert(it.copy(completedCycles = completedCycles)) }
+        todaySession?.let {
+            pomodoroRepository.insert(
+                it.copy(
+                    completedCycles = completedCycles,
+                    focusMinutesTotal = workSecondsTotal / 60
+                )
+            )
+        }
     }
 
     enum class Phase { WORK, BREAK, LONG_BREAK }

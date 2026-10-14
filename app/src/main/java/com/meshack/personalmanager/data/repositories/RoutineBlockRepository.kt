@@ -24,6 +24,10 @@ class RoutineBlockRepository @Inject constructor(
     suspend fun getNextFreeTimeBlock(fromMinute: Int, dayType: DayType): RoutineBlock? =
         dao.getNextFreeTimeBlockAfter(dayType, fromMinute)
 
+    /** Returns the next block (any kind) starting at or after the given minute, or null. */
+    suspend fun getNextBlockAfter(fromMinute: Int, dayType: DayType): RoutineBlock? =
+        dao.getNextFreeTimeBlockAfter(dayType, fromMinute)
+
     /** Validates no overlap with other blocks of the same dayType before saving. */
     suspend fun insertWithValidation(block: RoutineBlock): Result<Long> = runCatching {
         val blocks = dao.getAllBlocksForDayTypeSync(block.dayType)

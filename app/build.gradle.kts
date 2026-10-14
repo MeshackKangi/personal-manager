@@ -59,6 +59,9 @@ dependencies {
     implementation(libs.compose.material.icons.extended)
     implementation(libs.compose.navigation)
 
+    // Celebration animation
+    implementation(libs.lottie.compose)
+
     // Settings (DataStore Preferences)
     implementation(libs.androidx.datastore.preferences)
 
